@@ -11,6 +11,43 @@
 const OpenAPIToHar = require('./openapi-to-har.js');
 const HTTPSnippet = require('httpsnippet');
 
+
+/**
+ * Return snippets for endpoint identified using path and method in the given
+ * OpenAPI document.
+ *
+ * @param {string} url     url, e.g., 'http://localhost:8080/users'
+ * @param {string} method   HTTP method identifying endpoint, e.g., 'get'
+ * @param {array} targets   List of languages to create snippets in, e.g,
+ *                          ['cURL', 'Node']
+ * @param {object} queryParams   Optional: Values for the query parameters if present
+ * @param  {object} inputHeaders       Optional: Values for the headers if present.
+ * @param {string} body Optional: Values for the body if present.
+ */
+const getEndpointSnippetsFromValue = function(url, method, targets, queryParams, inputHeaders, body) {
+  const hars = OpenAPIToHar.getEndpointFromValue(url, method, queryParams, inputHeaders, body);
+
+  const snippets = [];
+  for (const har of hars) {
+    const snippet = new HTTPSnippet(har);
+    snippets.push(
+      ...getSnippetsForTargets(
+        targets,
+        snippet
+      )
+    );
+  }
+  // use first element since method, url, and description
+  // are the same for all elements
+  return {
+    method: hars[0].method,
+    url: hars[0].url,
+    description: hars[0].description,
+    resource: getResourceName(hars[0].url),
+    snippets: snippets
+  };
+};
+
 /**
  * Return snippets for endpoint identified using path and method in the given
  * OpenAPI document.
@@ -215,6 +252,7 @@ const capitalizeFirstLetter = function (string) {
 module.exports = {
   getSnippets,
   getEndpointSnippets,
+  getEndpointSnippetsFromValue
 };
 
 // The if is only for when this is run from the browser
@@ -227,6 +265,7 @@ if (typeof window !== 'undefined') {
   OpenAPISnippets = {
     getSnippets,
     getEndpointSnippets,
+    getEndpointSnippetsFromValue
   };
 
   // replace/create the global namespace

@@ -20,6 +20,65 @@
  */
 const OpenAPISampler = require('openapi-sampler');
 
+
+/**
+ *  Create HAR parameter array from object
+ */
+const objectToHarParam = function(obj) {
+  const value = [];
+  for (const key in obj) {
+    value.push({
+      name: key,
+      value: obj[key]
+    });
+  }
+  return value;
+};
+
+/**
+ * Create HAR Request object for path and method pair described in given Values
+ *
+ * @param  {Object} url               full url
+ * @param  {string} method            Key of the method
+ * @param  {Object} queryParams  Optional: Values for the query parameters if present
+ * @param  {Object} inputHeaders       Optional: Values for the headers if present.
+ * @param  {string} body          Optional: Values for the body if present.
+ * @return {array}                    List of HAR Request objects for the endpoint
+ */
+const createHarFromValue = function(url, method, queryParams, inputHeaders, body) {
+  // if the operational parameters are not provided, initialize them
+  if (typeof queryParams === 'undefined') {
+    queryParams = {};
+  }
+  if (typeof inputHeaders === 'undefined') {
+    inputHeaders = {};
+  }
+  if (typeof body === 'undefined') {
+    body = '';
+  }
+  const headers = objectToHarParam(inputHeaders)
+  let postData = {};
+  if (body.length > 0) {
+    const mimeTypeHeader = headers.find((header) => typeof header.name === 'string' && header.name.toLowerCase() === 'content-type');
+    if (mimeTypeHeader !== undefined)
+      postData.mimeType = mimeTypeHeader.value;
+    postData.text = body;
+  }
+  const baseHar = {
+    method: method.toUpperCase(),
+    url: url,
+    headers: objectToHarParam(inputHeaders),
+    queryString: objectToHarParam(queryParams),
+    httpVersion: 'HTTP/1.1',
+    cookies: objectToHarParam({}),
+    headersSize: 0,
+    bodySize: 0,
+    postData: postData
+  };
+
+  return [baseHar];
+};
+
 /**
  * Create HAR Request object for path and method pair described in given OpenAPI
  * document.
@@ -227,8 +286,8 @@ const createHarParameterObjects = function (
   }
 
   const objects = [];
-  style = style ?? getDefaultStyleForLocation(location);
-  explode = explode ?? getDefaultExplodeForStyle(style);
+  style = (style !== null && style !== undefined) ? style : getDefaultStyleForLocation(location);
+  explode = (explode !== null && explode !== undefined) ? explode : getDefaultExplodeForStyle(style);
 
   if (location === 'query' || location === 'cookie') {
     const separator = getArrayElementSeparator(style);
@@ -823,5 +882,6 @@ const resolveRef = function (openApi, ref) {
 module.exports = {
   getAll: openApiToHarList,
   getEndpoint: createHar,
-  createHarParameterObjects,
+  getEndpointFromValue: createHarFromValue,
+  createHarParameterObjects
 };
