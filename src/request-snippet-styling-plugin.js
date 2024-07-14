@@ -56,29 +56,29 @@ function loadSyntaxHighlighter(targetSnippets) {
 }
 
 function ManyTargetHighlightComponent(ori, sys) {
+  const overrideHighlight = (
+    {
+      language,
+      className = '',
+      getConfigs,
+      syntaxHighlighting = {},
+      children = ''
+    }
+  ) => {
+    const theme = getConfigs().syntaxHighlight.theme;
+    const { styles, defaultStyle } = syntaxHighlighting;
+    const style = styles?.[theme] ?? defaultStyle;
+    return createElement(ReactSyntaxHighlighter, {
+      lanuage: language,
+      className: className,
+      style: style
+    }, children);
+  };
   return (props) => {
     const Original = ori(props);
-    const generateHighlight = (
-      {
-        language,
-        className = '',
-        getConfigs,
-        syntaxHighlighting = {},
-        children = ''
-      }
-    ) => {
-      const theme = getConfigs().syntaxHighlight.theme;
-      const { styles, defaultStyle } = syntaxHighlighting;
-      const style = styles?.[theme] ?? defaultStyle;
-      return createElement(ReactSyntaxHighlighter, {
-        lanuage: language,
-        className: className,
-        style: style
-      }, children);
-    };
     return {
       ...Original,
-      type: generateHighlight
+      type: overrideHighlight
     };
   };
 }
