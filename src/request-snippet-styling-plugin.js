@@ -89,11 +89,14 @@ function ManyTargetHighlightComponent(ori, sys) {
  * @return {boolean | object} if component has 'class: bt' return true. else if component is container return object else return false
  */
 function findBtnContainer(component) {
+  if (!component.props) {
+    return false;
+  }
   if (component.props.className && component.props.className.split(' ').find((name) => name === 'btn')) {
     return true;
   }
   let isContainer = false;
-  for (const child of component.props.children) {
+  for (const child of component.props.children[Symbol.iterator] ? component.props.children : []) {
     const result = findBtnContainer(child);
     if (typeof result === 'object') {
       return result;
@@ -105,8 +108,6 @@ function findBtnContainer(component) {
   } else {
     return false;
   }
-  // todo :: refactor logic for find btn container
-  // return component.props.children[1].props.children[0];
 }
 
 /**
