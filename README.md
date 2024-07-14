@@ -10,11 +10,11 @@ This Repository is forked from [ErikWittern/openapi-snippet](https://github.com/
 - Generate request snippets from request data.
 - Fix style of RequestSnippets in SwaggerUI.
 
-## Example with SwaggerUI
+## Sample with SwaggerUI
 
 ### With unpkg
 
-Open the html file for Live Demo.
+Live Demo in [sample HTML](https://https://tronto20.github.io/swagger-snippet-generator/sample/unpkg/index.html)
 
 ```html
 <!DOCTYPE html>
@@ -42,6 +42,15 @@ Open the html file for Live Demo.
     },
     {
       target: 'python_requests'
+    },
+    {
+      target: 'javascript'
+    },
+    {
+      target: 'java'
+    },
+    {
+      target: 'go'
     }
   ];
   window.onload = () => {
