@@ -14,7 +14,7 @@
   ],
   "author": "tronto20",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "dist/swagger-snippet-generator.min.js",
   "scripts": {
     "build": "webpack --progress"
   },

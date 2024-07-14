@@ -1,90 +1,110 @@
-# OpenAPI Snippet
-**Generates code snippets from Open API (previously Swagger) documents.**
+# Swagger Snippet Generator
+**Generates code snippets in Swagger UI.**
 
-This package takes as input an OpenAPI v2.0 or v3.0.x document. It translates the document into an [HTTP Archive 1.2 request object](http://www.softwareishard.com/blog/har-12-spec/#request). It uses the [HTTP Snippet](https://github.com/Mashape/httpsnippet) library to generate code snippets for every API endpoint (URL path + HTTP method) defined in the specification in various languages & tools (`cURL`, `Node`, `Python`, `Ruby`, `Java`, `Go`, `C#`...), or for selected endpoints.
+This package takes as input an HTTP Request. It translates the request into an [HTTP Archive 1.2 request object](http://www.softwareishard.com/blog/har-12-spec/#request). It uses the [HTTP Snippet](https://github.com/Mashape/httpsnippet) library to generate code snippets for every API endpoint (URL path + HTTP method) defined in the specification in various languages & tools (`cURL`, `Node`, `Python`, `Ruby`, `Java`, `Go`, `C#`...), or for selected endpoints.
 
-## Installation
+This Repository is forked from [ErikWittern/openapi-snippet](https://github.com/ErikWittern/openapi-snippet)
 
-```bash
-npm i openapi-snippet
-```
+## Features
 
-## Build OpenAPI Snippet (for use in browser)
-Clone this repository. Install required dependencies:
+- Generate request snippets.
+- Fix style of RequestSnippet in SwaggerUI.
 
-```bash
-npm i
-```
+## Example with SwaggerUI
 
-Build a minified version of OpenAPI Snippet (`openapisnippet.min.js`):
-
-```bash
-npm run build
-```
-
-## Usage
-
-### As a module
+### With SwaggerUI module
 
 ```javascript
-const OpenAPISnippet = require('openapi-snippet')
+import SwaggerUI from 'swagger-ui';
+import SwaggerSnippetGenerator from 'swagger-snippet-generator';
 
-// define input:
-const openApi = ... // Open API document
-const targets = ['node_unirest', 'c'] // array of targets for code snippets. See list below...
+// define Array of SnippetTarget
+const snippetTargets = [
+    {
+        title: 'python (http.client)',
+        target: 'python'
+    },
+    {
+        target: 'python_requests'
+    }
+];
 
-try {
-  // either, get snippets for ALL endpoints:
-  const results = OpenAPISnippet.getSnippets(openApi, targets) // results is now array of snippets, see "Output" below.
-
-  // ...or, get snippets for a single endpoint:
-  const results2 = OpenAPISnippet.getEndpointSnippets(openApi, '/users/{user-id}/relationship', 'get', targets)
-} catch (err) {
-  // do something with potential errors...
-}
+SwaggerUI({
+  dom_id: '#swagger-ui',
+  plugins: [
+      SwaggerSnippetGenerator(snippetTargets)
+  ],
+  requestSnippetsEnabled: true
+});
 ```
 
-### Within the browser
+### With SwaggerUI Bundle
 
-Include the `openapisnippet.min.js` file created after building the the library (see above) in your HTML page:
+Include the `[swagger-snippet-generator.min.js](dist%2Fswagger-snippet-generator.min.js)` file in your SwaggerUI HTML page:
+
+Use SwaggerSnippetGenerator, which now defines the global variable `SwaggerSnippetGenerator`.
+
+You can use `SwaggerSnippetGenerator(snippetTargets)` as a Plugin 
 
 ```html
-<script type="text/javascript" src="path/to/openapisnippet.min.js"></script>
+
+<body>
+<div id="swagger-ui"></div>
+
+<script charset="UTF-8" src="/path/to/swagger-snippet-generator.min.js"></script>
+<script charset="UTF-8" src="/path/to/swagger-ui-bundle.js"></script>
+<script charset="UTF-8" src="/path/to/swagger-ui-standalone-preset.js"></script>
+<script>
+  <!-- swagger-initializer.js -->
+  const snippetTargets = [
+    {
+      title: 'python (http.client)',
+      syntax: 'python',
+      target: 'python'
+    },
+    {
+      target: 'python_requests'
+    }
+  ];
+
+  window.onload = function() {
+    window.ui = SwaggerUIBundle({
+      url: 'https://petstore.swagger.io/v2/swagger.json',
+      dom_id: '#swagger-ui',
+      presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIStandalonePreset
+      ],
+      plugins: [
+        SwaggerUIBundle.plugins.DownloadUrl,
+        SwaggerSnippetGenerator(snippetTargets)
+      ],
+      layout: 'StandaloneLayout',
+      requestSnippetsEnabled: true
+    });
+  };
+</script>
+</body>
+
+</html>
 ```
 
-Use OpenAPI Snippet, which now defines the global variable `OpenAPISnippet`.
+## Parameter
 
+### SnippetTarget
 
-## Output
-The output for every endpoint is an object, containing the `method`, `url`, a human-readable `description`, and the corresponding `resource` - all of these values stem from the OpenAPI document. In addition, within the `snippets` list, an object containing a code snippet for every chosen target is provided. As of version `0.4.0`, the snippets include exemplary payload data.
-
-If `getSnippets` is used, an array of the above described objects is returned.
-
-For example:
-
-```js
-[
-  // ...
-  {
-    "method": "GET",
-    "url": "https://api.instagram.com/v1/users/{user-id}/relationship",
-    "description": "Get information about a relationship to another user.",
-    "resource": "relationship",
-    "snippets": [
-      {
-        "id": "node",
-        "mimeType": "application/json",  // Only set for methods with a request body
-        "title": "Node + Native",
-        "content": "var http = require(\"https\");\n\nvar options = {..."
-      }
-    ]
-  }
-  // ...
-]
+Define target as SnippetTarget object
+```javascript
+SnippetTarget = {
+  target: 'Target language and library (see below)',
+  title:  '(Optional) Button title. Generate from target if undefined',
+  syntax: '(Optional) Syntax highlighting. Detect from target if undefined.'
+};
 ```
+
 
 ## Targets
-Currently, OpenAPI Snippet supports the following [targets](https://github.com/Kong/httpsnippet/tree/master/src/targets) (depending on the HTTP Snippet library):
+Currently, Swagger Snippet Generator supports the following [targets](https://github.com/Kong/httpsnippet/tree/master/src/targets) (depending on the HTTP Snippet library):
 
 * `c_libcurl` (default)
 * `csharp_restsharp` (default)
@@ -114,3 +134,23 @@ If only the language is provided (e.g., `c`), the default library will be select
 
 
 License: MIT
+
+
+## Installation
+
+```bash
+npm i swagger-snippet-generator
+```
+
+## Build Swagger Snippet Generator (for use in browser)
+Clone this repository. Install required dependencies:
+
+```bash
+npm i
+```
+
+Build a minified version of Swagger Snippet Generator (`[swagger-snippet-generator.min.js](dist%2Fswagger-snippet-generator.min.js)`):
+
+```bash
+npm run build
+```
