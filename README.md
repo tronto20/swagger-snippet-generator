@@ -7,10 +7,63 @@ This Repository is forked from [ErikWittern/openapi-snippet](https://github.com/
 
 ## Features
 
-- Generate request snippets.
-- Fix style of RequestSnippet in SwaggerUI.
+- Generate request snippets from request data.
+- Fix style of RequestSnippets in SwaggerUI.
 
 ## Example with SwaggerUI
+
+### With unpkg
+
+Open the html file for Live Demo.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="SwaggerUI" name="description" />
+  <title>SwaggerUI</title>
+  <link href="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui.css" rel="stylesheet" />
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script crossorigin src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-bundle.js"></script>
+<script crossorigin src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-standalone-preset.js"></script>
+<script crossorigin
+        src="https://unpkg.com/swagger-snippet-generator@0.15.0/dist/swagger-snippet-generator.min.js"></script>
+<script>
+  // define array of SnippetTarget
+  const snippetTargets = [
+    {
+      title: 'python (http.client)',
+      syntax: 'python',
+      target: 'python'
+    },
+    {
+      target: 'python_requests'
+    }
+  ];
+  window.onload = () => {
+    window.ui = SwaggerUIBundle({
+      url: 'https://petstore3.swagger.io/api/v3/openapi.json',
+      dom_id: '#swagger-ui',
+      presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIStandalonePreset
+      ],
+      plugins: [
+        SwaggerUIBundle.plugins.DownloadUrl,
+        SwaggerSnippetGenerator(snippetTargets)
+      ],
+      layout: 'StandaloneLayout',
+      requestSnippetsEnabled: true
+    });
+  };
+</script>
+</body>
+</html>
+```
 
 ### With SwaggerUI module
 
@@ -18,7 +71,7 @@ This Repository is forked from [ErikWittern/openapi-snippet](https://github.com/
 import SwaggerUI from 'swagger-ui';
 import SwaggerSnippetGenerator from 'swagger-snippet-generator';
 
-// define Array of SnippetTarget
+// define array of SnippetTarget
 const snippetTargets = [
     {
         title: 'python (http.client)',
@@ -56,6 +109,7 @@ You can use `SwaggerSnippetGenerator(snippetTargets)` as a Plugin
 <script charset="UTF-8" src="/path/to/swagger-ui-standalone-preset.js"></script>
 <script>
   <!-- swagger-initializer.js -->
+  // define array of SnippetTarget
   const snippetTargets = [
     {
       title: 'python (http.client)',
