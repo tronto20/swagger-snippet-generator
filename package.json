@@ -1,33 +1,35 @@
 {
-  "name": "openapi-snippet",
-  "version": "0.14.0",
-  "description": "Generates code snippets from Open API (previously Swagger) documents.",
+  "name": "swagger-snippet-generator",
+  "version": "0.15.0",
+  "description": "Generates code snippets in Swagger UI",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ErikWittern/openapi-snippet"
+    "url": "https://github.com/tronto20/swagger-snippet-generator"
   },
   "keywords": [
     "HTTP",
     "code snippets",
-    "OpenAPI Specification",
-    "Swagger"
+    "Swagger UI",
+    "Swagger Plugin"
   ],
-  "author": "Erik Wittern",
+  "author": "tronto20",
   "license": "MIT",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "node test/test.js | tap-spec",
-    "build": "mkdir -p dist && browserify -g uglifyify ./index.js > ./dist/openapisnippet.min.js"
+    "build": "webpack --progress"
   },
   "dependencies": {
-    "httpsnippet": "^2.0.0",
-    "openapi-sampler": "^1.0.0-beta.14"
+    "httpsnippet": "^3.0.0",
+    "react-syntax-highlighter": "^15.5.0"
   },
   "devDependencies": {
-    "browserify": "^16.2.3",
+    "browserify": "^17.0.0",
     "prettier": "2.3.0",
+    "process": "^0.11.10",
+    "querystring-es3": "^0.2.1",
     "tap-spec": "^5.0.0",
     "tape": "^4.10.1",
-    "uglifyify": "^5.0.2"
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4"
   }
 }
