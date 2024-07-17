@@ -12,7 +12,7 @@ This Repository is forked from [ErikWittern/openapi-snippet](https://github.com/
 
 ## Sample with SwaggerUI
 
-### With unpkg
+### With SwaggerUIBundle (unpkg)
 
 Live Demo in [sample HTML](https://https://tronto20.github.io/swagger-snippet-generator/sample/unpkg/index.html)
 
@@ -99,60 +99,6 @@ SwaggerUI({
   requestSnippetsEnabled: true
 });
 ```
-
-### With SwaggerUI Bundle
-
-Include the `[swagger-snippet-generator.min.js](dist%2Fswagger-snippet-generator.min.js)` file in your SwaggerUI HTML page:
-
-Use SwaggerSnippetGenerator, which now defines the global variable `SwaggerSnippetGenerator`.
-
-You can use `SwaggerSnippetGenerator(snippetTargets)` as a Plugin 
-
-```html
-
-<body>
-<div id="swagger-ui"></div>
-
-<script charset="UTF-8" src="/path/to/swagger-snippet-generator.min.js"></script>
-<script charset="UTF-8" src="/path/to/swagger-ui-bundle.js"></script>
-<script charset="UTF-8" src="/path/to/swagger-ui-standalone-preset.js"></script>
-<script>
-  <!-- swagger-initializer.js -->
-  // define array of SnippetTarget
-  const snippetTargets = [
-    {
-      title: 'python (http.client)',
-      syntax: 'python',
-      target: 'python'
-    },
-    {
-      target: 'python_requests'
-    }
-  ];
-
-  window.onload = function() {
-    window.ui = SwaggerUIBundle({
-      url: 'https://petstore.swagger.io/v2/swagger.json',
-      dom_id: '#swagger-ui',
-      presets: [
-        SwaggerUIBundle.presets.apis,
-        SwaggerUIStandalonePreset
-      ],
-      plugins: [
-        SwaggerUIBundle.plugins.DownloadUrl,
-        SwaggerSnippetGenerator(snippetTargets)
-      ],
-      layout: 'StandaloneLayout',
-      requestSnippetsEnabled: true
-    });
-  };
-</script>
-</body>
-
-</html>
-```
-
-## Parameter
 
 ### SnippetTarget
 
