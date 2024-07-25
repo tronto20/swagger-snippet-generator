@@ -10,69 +10,60 @@ This Repository is forked from [ErikWittern/openapi-snippet](https://github.com/
 - Generate request snippets from request data.
 - Fix style of RequestSnippets in SwaggerUI.
 
+## Installation
+
+```bash
+npm i swagger-snippet-generator
+```
+
+## Install as bundle (for use in browser)
+Include the [swagger-snippet-generator.min.js](dist%2Fswagger-snippet-generator.min.js) file in your HTML page:
+
+```html
+<script charset="UTF-8" src="/path/to/swagger-snippet-generator.min.js" type="text/javascript"></script>
+```
+
+Use Swagger Snippet Generator, which now defines the global variable `SwaggerSnippetGenerator`:
+
+```js
+const snippetTargets = [
+    {
+        title: 'python (http.client)',
+        target: 'python'
+    },
+    {
+        target: 'python_requests'
+    }
+];
+
+SwaggerUIBundle({
+  ...
+  plugins: [
+    SwaggerSnippetGenerator(snippetTargets)
+  ],
+  requestSnippetsEnabled: true
+  ...
+});
+```
+
+## Build Swagger Snippet Generator
+Clone this repository. Install required dependencies:
+
+```bash
+npm i
+```
+
+Build a minified version of Swagger Snippet Generator ([swagger-snippet-generator.min.js](dist%2Fswagger-snippet-generator.min.js)):
+
+```bash
+npm run build
+```
+
 ## Sample with SwaggerUI
 
 ### With SwaggerUIBundle (unpkg)
 
 Live Demo in [sample HTML](https://https://tronto20.github.io/swagger-snippet-generator/sample/unpkg/index.html)
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <meta content="SwaggerUI" name="description" />
-  <title>SwaggerUI</title>
-  <link href="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui.css" rel="stylesheet" />
-</head>
-<body>
-<div id="swagger-ui"></div>
-<script crossorigin src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-bundle.js"></script>
-<script crossorigin src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-standalone-preset.js"></script>
-<script crossorigin
-        src="https://unpkg.com/swagger-snippet-generator@0.15.0/dist/swagger-snippet-generator.min.js"></script>
-<script>
-  // define array of SnippetTarget
-  const snippetTargets = [
-    {
-      title: 'python (http.client)',
-      syntax: 'python',
-      target: 'python'
-    },
-    {
-      target: 'python_requests'
-    },
-    {
-      target: 'javascript'
-    },
-    {
-      target: 'java'
-    },
-    {
-      target: 'go'
-    }
-  ];
-  window.onload = () => {
-    window.ui = SwaggerUIBundle({
-      url: 'https://petstore3.swagger.io/api/v3/openapi.json',
-      dom_id: '#swagger-ui',
-      presets: [
-        SwaggerUIBundle.presets.apis,
-        SwaggerUIStandalonePreset
-      ],
-      plugins: [
-        SwaggerUIBundle.plugins.DownloadUrl,
-        SwaggerSnippetGenerator(snippetTargets)
-      ],
-      layout: 'StandaloneLayout',
-      requestSnippetsEnabled: true
-    });
-  };
-</script>
-</body>
-</html>
-```
 
 ### With SwaggerUI module
 
@@ -145,21 +136,3 @@ If only the language is provided (e.g., `c`), the default library will be select
 License: MIT
 
 
-## Installation
-
-```bash
-npm i swagger-snippet-generator
-```
-
-## Build Swagger Snippet Generator (for use in browser)
-Clone this repository. Install required dependencies:
-
-```bash
-npm i
-```
-
-Build a minified version of Swagger Snippet Generator (`[swagger-snippet-generator.min.js](dist%2Fswagger-snippet-generator.min.js)`):
-
-```bash
-npm run build
-```
