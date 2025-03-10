@@ -63,7 +63,9 @@ npm run build
 
 ### With SwaggerUIBundle (unpkg)
 
-Live Demo in [sample HTML](https://https://tronto20.github.io/swagger-snippet-generator/sample/unpkg/index.html)
+Live Demo in [sample HTML](https://tronto20.github.io/swagger-snippet-generator/)
+
+![img.png](docs/sample.png)
 
 ### With SwaggerUI module
 
