@@ -1,0 +1,64 @@
+name: release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Tag version"
+        required: true
+
+env:
+  VERSION: ${{ github.event.inputs.version }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - name: git config
+        run: |
+          git config --global user.name ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'tronto20' }}
+          git config --global user.email "${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'tronto20' }}@noreply.github.com"
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install
+        run: npm ci
+
+      - name: version
+        run: npm version "${{ env.VERSION }}"
+
+      - name: git versioning
+        run: |
+          git tag --list
+          git remote -v
+
+      - name: push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: push tags
+        run: git push origin v${{ env.VERSION }}
+
+      - name: release to npm
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Tag and Release
+        uses: ncipollo/release-action@v1
+        id: core_tag_and_release
+        with:
+          tag: v${{ env.VERSION }}
+          name: 'v${{ env.VERSION }}'
+          generateReleaseNotes: true
+          prerelease: false
+          draft: false
