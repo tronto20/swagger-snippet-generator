@@ -17,7 +17,7 @@ npm i swagger-snippet-generator
 ```
 
 ## Install as bundle (for use in browser)
-Include the [swagger-snippet-generator.min.js](dist%2Fswagger-snippet-generator.min.js) file in your HTML page:
+Include the [swagger-snippet-generator.min.js](https://github.com/tronto20/swagger-snippet-generator/releases) file in your HTML page:
 
 ```html
 <script charset="UTF-8" src="/path/to/swagger-snippet-generator.min.js" type="text/javascript"></script>
