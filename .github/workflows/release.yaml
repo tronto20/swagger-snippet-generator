@@ -38,6 +38,9 @@ jobs:
       - name: version
         run: npm version "${{ env.VERSION }}"
 
+      - name: build
+        run: npm run build
+
       - name: git versioning
         run: |
           git tag --list
@@ -59,3 +62,4 @@ jobs:
           generateReleaseNotes: true
           prerelease: false
           draft: false
+          artifacts: 'dist/*'
