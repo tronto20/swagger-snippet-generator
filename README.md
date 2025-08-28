@@ -10,6 +10,13 @@ This Repository is forked from [ErikWittern/openapi-snippet](https://github.com/
 - Generate request snippets from request data.
 - Fix style of RequestSnippets in SwaggerUI.
 
+## Compatibility
+
+| versions | swagger-ui |   |
+|----------|------------|---|
+| 0.15.2   | 5.17.14 ~  |   |
+| 0.16.x   | 5.28.0  ~  |   |
+
 ## Installation
 
 ```bash
@@ -135,6 +142,7 @@ Currently, Swagger Snippet Generator supports the following [targets](https://gi
 If only the language is provided (e.g., `c`), the default library will be selected.
 
 
-License: MIT
+## License
+MIT
 
 
