@@ -15,7 +15,7 @@ This Repository is forked from [ErikWittern/openapi-snippet](https://github.com/
 | versions | swagger-ui |   |
 |----------|------------|---|
 | 0.15.2   | 5.17.14 ~  |   |
-| 0.16.x   | 5.28.0  ~  |   |
+| 0.16.1   | 5.28.0  ~  |   |
 
 ## Installation
 
