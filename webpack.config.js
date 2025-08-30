@@ -3,7 +3,11 @@ const webpack = require('webpack');
 const fallback = {};
 Object.assign(fallback, {
   stream: require.resolve('stream-browserify'),
-  querystring: require.resolve('querystring-es3')
+  path: require.resolve('path-browserify'),
+  http: require.resolve('stream-http'),
+  https: require.resolve('https-browserify'),
+  querystring: require.resolve('querystring-es3'),
+  fs: false
 });
 module.exports = {
   entry: './src/index.js',
