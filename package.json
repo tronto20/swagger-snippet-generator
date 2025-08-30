@@ -1,6 +1,6 @@
 {
   "name": "swagger-snippet-generator",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "Generates code snippets in Swagger UI",
   "repository": {
     "type": "git",
